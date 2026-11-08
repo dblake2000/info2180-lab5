@@ -150,3 +150,8 @@ td:first-child {
 td:last-child {
     border-radius: 0 8px 8px 0;
 }
+
+/* exercise 5 - lookup cities button - orange so it stands out from lookup country */
+#controls #lookup-cities {
+    background-color: var(--orange);
+}

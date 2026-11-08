@@ -11,14 +11,51 @@ $conn = new PDO("mysql:host=$host;dbname=$dbname;charset=utf8mb4", $username, $p
 /* if there is no country in the url use an empty string - this returns all countries */
 $country = isset($_GET['country']) ? trim($_GET['country']) : "";
 
-/* only get countries with the search text in the name - LIKE lets "Jam" find "Jamaica" */
-/* prepare and execute keeps the search safe from sql injection */
-$stmt = $conn->prepare("SELECT * FROM countries WHERE name LIKE :country");
+/* exercise 5 - check if we want cities e.g. world.php?country=Jamaica&lookup=cities */
+$lookup = isset($_GET['lookup']) ? $_GET['lookup'] : "";
+
+if ($lookup === "cities") {
+
+    /* exercise 5 - join cities and countries so we can find cities using the country name */
+    /* c is short for cities and cs is short for countries */
+    $stmt = $conn->prepare("SELECT c.name, c.district, c.population
+                            FROM cities c
+                            JOIN countries cs ON c.country_code = cs.code
+                            WHERE cs.name LIKE :country");
+} else {
+
+    /* only get countries with the search text in the name - LIKE lets "Jam" find "Jamaica" */
+    /* prepare and execute keeps the search safe from sql injection */
+    $stmt = $conn->prepare("SELECT * FROM countries WHERE name LIKE :country");
+}
+
 $stmt->execute(['country' => "%$country%"]);
 
 $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
 ?>
+<?php if ($lookup === "cities"): ?>
+<!-- exercise 5 - show the cities in a table with name, district and population -->
+<table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>District</th>
+      <th>Population</th>
+    </tr>
+  </thead>
+  <tbody>
+  <?php foreach ($results as $row): ?>
+    <tr>
+      <td><?= htmlspecialchars($row['name']); ?></td>
+      <td><?= htmlspecialchars($row['district']); ?></td>
+      <td><?= htmlspecialchars($row['population']); ?></td>
+    </tr>
+  <?php endforeach; ?>
+  </tbody>
+</table>
+
+<?php else: ?>
 <!-- exercise 4 - show the countries in a table instead of a list -->
 <table>
   <thead>
@@ -42,3 +79,4 @@ $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
   <?php endforeach; ?>
   </tbody>
 </table>
+<?php endif; ?>
