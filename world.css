@@ -114,3 +114,39 @@ header h1 {
     padding: 12px 16px;
     margin-bottom: 8px;
 }
+
+/* exercise 4 - table of countries - gaps between rows so each row looks like a card */
+table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0 8px;
+}
+
+/* table headings - small spaced out blue labels */
+th {
+    color: var(--blue);
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    text-align: left;
+    padding: 0 16px 4px;
+}
+
+/* table cells - light blue boxes */
+td {
+    background-color: var(--light-blue);
+    padding: 14px 16px;
+}
+
+/* first column - bold navy name with rounded left corners */
+td:first-child {
+    color: var(--navy);
+    font-weight: 700;
+    border-radius: 8px 0 0 8px;
+}
+
+/* last column - rounded right corners */
+td:last-child {
+    border-radius: 0 8px 8px 0;
+}
